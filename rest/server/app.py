@@ -21,12 +21,15 @@ class WeatherEndpoint:
             "SELECT sensor, datetime, temp, humidity FROM weather_latest")
 
         # go through the results, row by row, building the return value
-        r = []
+        r = {}
         for sensor, datetime_, temp, humidity in cur:
             # convert some of types of some parts of the data to be those that
             # can be represented in JSON
-            r.append( (sensor, datetime_.isoformat(), float(temp),
-                       float(humidity)) )
+            r[sensor] = {
+                "datetime": datetime_.isoformat(),
+                "temp": float(temp),
+                "humidity": float(humidity))
+            }
 
         # return the results
         resp.body = json.dumps(r)

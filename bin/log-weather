@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+
+# log-weather - get current weather data and update the database
+
+
+from datetime import datetime
+import sys
+from time import sleep
+
+import psycopg2
+
+from btleWeatherStation import WeatherStation
+
+
+# MAC address of the weather station to connect to
+STATION_MAC = "e0:db:ba:ac:0e:93"
+
+# record history on multiples of these minutes past the hour (so probably
+# should be something that divides into 60 exactly)
+HISTORY_MINS = 15
+
+# get the date and time now
+now = datetime.utcnow()
+
+# connect to our weather station and get the current data, with some retries
+w = WeatherStation(STATION_MAC)
+w.measure_retry()
+
+# connect to the database and get a cursor
+conn = psycopg2.connect("dbname=weather")
+cur = conn.cursor()
+
+# work through the 4 sensors, including the internal one (0)
+for s in range(0, 4):
+    # get the data from this sensor
+    temp = w.get_temp(s)["current"]
+    humidity = w.get_humidity(s)["current"]
+
+    # store this temperature in the latest table
+    cur.execute("SELECT weather_latest_update (%s, %s, %s, %s)",
+                (s, now, temp, humidity))
+
+    # store the data in the history table if we're on a multiple of 15 minutes
+    if (now.minute % HISTORY_MINS) == 0:
+        cur.execute(
+        """INSERT INTO weather_history (sensor, datetime, temp, humidity)
+             VALUES (%s, %s, %s, %s)
+        """,
+        (s, now, temp, humidity))
+
+# commit the transaction and close the connection to the database
+conn.commit()
+conn.close()

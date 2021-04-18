@@ -1,6 +1,6 @@
 # weather-server.py
 
-# run with 'gunicorn3 server.app:api'
+# run with 'gunicorn3 -D -b :8123 server.app:api'
 
 
 import datetime

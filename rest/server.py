@@ -1,12 +1,19 @@
-import falcon, json
+# temperature-server.py
 
 
-class CompaniesResource(object):
-  companies = [{"id": 1, "name": "Company One"}, {"id": 2, "name": "Company Two"}]
-  people = {"Mike": {"likes": "Heavy Metal"}, "Bob": {"likes": "Mince"}}
+import falcon
+import json
+import psycopg2
 
-  def on_get_companies(self, req, resp):
-    resp.body = json.dumps(self.companies)
+
+conn = psycopg2.connect("dbname=weather")
+cur = conn.cursor()
+
+class WeatherResource(object):
+  def on_get_weather_latest(self, req, resp):
+    cur.execute("SELECT sensor, datetime, temp, humidity")
+    results = cur.fetchall()
+    resp.body = json.dumps(results)
 
   def on_get_people(self, req, resp):
     resp.body = json.dumps(self.people)
@@ -18,6 +25,5 @@ class CompaniesResource(object):
     self.people[j['name']] = {"likes": j['likes']}
 
 api = falcon.API()
-companies_endpoint = CompaniesResource()
-api.add_route('/companies', companies_endpoint, suffix='companies')
-api.add_route('/people', companies_endpoint, suffix='people')
+weather_endpoint = WeatherResource()
+api.add_route('/weather/latest', weather_endpoint, suffix='weather_latest')

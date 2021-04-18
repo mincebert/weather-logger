@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# start-server
+
+
+gunicorn3 -D -b :8123 server.app:api

@@ -28,7 +28,7 @@ class WeatherEndpoint:
             r[sensor] = {
                 "datetime": datetime_.isoformat(),
                 "temp": float(temp),
-                "humidity": float(humidity))
+                "humidity": float(humidity)
             }
 
         # return the results

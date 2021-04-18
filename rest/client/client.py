@@ -8,6 +8,7 @@ import scrollphathd as sphd
 import thermofont
 
 sphd.set_font(thermofont)
+sphd.rotate(180)
 
 while True:
     response = requests.get("http://shizuka.local:8123/weather/latest")

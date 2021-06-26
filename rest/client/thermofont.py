@@ -1,9 +1,9 @@
-# thermo.py
+# thermofont.py
 #
 # Font for thermometer.
 
 
-# general dimensions of the characters (but width can vary0
+# general dimensions of the characters (but width can vary)
 
 width = 3
 height = 5

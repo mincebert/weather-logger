@@ -1,9 +1,3 @@
-CREATE DATABASE weather;
-
-
-\c weather
-
-
 -- create the 'latest' (current) weather table
 
 CREATE TABLE weather_latest (

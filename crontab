@@ -1,0 +1,2 @@
+# log the weather every minute
+* * * * *	/home/rcf/bin/log-weather

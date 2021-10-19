@@ -1,0 +1,5 @@
+CREATE ROLE rcf LOGIN;
+
+CREATE DATABASE weather;
+
+GRANT ALL ON DATABASE weather TO rcf;

@@ -1,2 +1,5 @@
 # log the weather every minute
 * * * * *	/home/rcf/bin/log-weather
+
+# start the REST server to provide weather information
+@reboot		/home/rcf/weather-logger/rest/start-server

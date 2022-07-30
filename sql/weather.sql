@@ -3,7 +3,7 @@
 CREATE TABLE weather_latest (
   sensor integer PRIMARY KEY CHECK (sensor >= 0),
 
-  datetime timestamp,
+  datetime timestamp with time zone,
   temp numeric(4, 1),
   humidity integer
 );
@@ -48,7 +48,7 @@ $$ LANGUAGE plpgsql;
 
 CREATE TABLE weather_history (
   sensor integer CHECK (sensor >= 0),
-  datetime timestamp,
+  datetime timestamp with time zone,
 
   temp numeric(4, 1),
   humidity integer,

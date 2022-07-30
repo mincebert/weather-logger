@@ -1,3 +1,23 @@
+-- create the sensor locations table
+--
+-- This describes the locations (current or historical) of the sensors.
+
+CREATE TABLE locations (
+  loc varchar PRIMARY KEY,
+  description varchar NOT NULL
+);
+
+
+-- create the sensor mapping table
+--
+-- This maps current sensor numbers to locations.
+
+CREATE TABLE sensors (
+  sensor integer PRIMARY KEY CHECK (sensor >= 0),
+  loc varchar REFERENCES locations (loc) NOT NULL
+);
+
+
 -- create the 'latest' (current) weather table
 
 CREATE TABLE weather_latest (

@@ -3,7 +3,7 @@
 -- This describes the locations (current or historical) of the sensors.
 
 CREATE TABLE locations (
-  loc varchar PRIMARY KEY,
+  location varchar PRIMARY KEY,
   description varchar NOT NULL
 );
 
@@ -14,14 +14,14 @@ CREATE TABLE locations (
 
 CREATE TABLE sensors (
   sensor integer PRIMARY KEY CHECK (sensor >= 0),
-  loc varchar UNIQUE REFERENCES locations (loc) NOT NULL
+  location varchar UNIQUE REFERENCES locations (location) NOT NULL
 );
 
 
 -- create the 'latest' (current) weather table
 
 CREATE TABLE weather_latest (
-  sensor integer PRIMARY KEY CHECK (sensor >= 0),
+  location PRIMARY KEY REFERENCES sensors (location),
 
   datetime timestamp with time zone,
   temp numeric(4, 1),

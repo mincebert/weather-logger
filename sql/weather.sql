@@ -14,7 +14,7 @@ CREATE TABLE locations (
 
 CREATE TABLE sensors (
   sensor integer PRIMARY KEY CHECK (sensor >= 0),
-  loc varchar REFERENCES locations (loc) NOT NULL
+  loc varchar UNIQUE REFERENCES locations (loc) NOT NULL
 );
 
 

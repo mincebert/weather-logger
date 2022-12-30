@@ -21,7 +21,7 @@ CREATE TABLE sensors (
 -- create the 'latest' (current) weather table
 
 CREATE TABLE weather_latest (
-  location PRIMARY KEY REFERENCES sensors (location),
+  location varchar PRIMARY KEY REFERENCES sensors (location),
 
   datetime timestamp with time zone,
   temp numeric(4, 1),

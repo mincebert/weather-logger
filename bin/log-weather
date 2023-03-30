@@ -19,8 +19,8 @@ STATION_MAC = "e0:db:ba:ac:0e:93"
 # should be something that divides into 60 exactly)
 HISTORY_MINS = 15
 
-# get the date and time now
-now = datetime.utcnow()
+# get the date and time now in the current timezone
+now = datetime.now()
 
 # connect to our weather station and get the current data, with some retries
 w = WeatherStation(STATION_MAC)
@@ -42,11 +42,8 @@ for s in range(0, 4):
 
     # store the data in the history table if we're on a multiple of 15 minutes
     if (now.minute % HISTORY_MINS) == 0:
-        cur.execute(
-        """INSERT INTO weather_history (sensor, datetime, temp, humidity)
-             VALUES (%s, %s, %s, %s)
-        """,
-        (s, now, temp, humidity))
+        cur.execute("SELECT weather_history_insert(%s, %s, %s, %s)",
+                    (s, now, temp, humidity))
 
 # commit the transaction and close the connection to the database
 conn.commit()

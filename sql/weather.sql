@@ -23,6 +23,11 @@ CREATE TABLE sensor_location (
 );
 
 
+-- 1. all users can read data from these tables
+
+GRANT SELECT ON location, sensor_location TO weather_users;
+
+
 -- ---------------------------------------------------------------------------
 -- WEATHER LATEST
 -- ---------------------------------------------------------------------------
@@ -37,6 +42,12 @@ CREATE TABLE weather_latest (
   temp numeric(4, 1),
   humidity integer
 );
+
+-- 1. all users can read this table
+-- 2. only the update user can append or replace data
+
+GRANT SELECT ON weather_latest TO weather_users;
+GRANT INSERT, UPDATE ON weather_latest TO weather_update;
 
 
 -- weather_latest_update()
@@ -96,6 +107,13 @@ CREATE TABLE weather_history (
 
   PRIMARY KEY (datetime, location)
 );
+
+
+-- 1. all users can read this table
+-- 2. only the update user can append (but not modify) data
+
+GRANT SELECT ON weather_history TO weather_users;
+GRANT INSERT ON weather_history TO weather_update;
 
 
 -- weather_history_insert()

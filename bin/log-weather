@@ -12,6 +12,12 @@ import psycopg2
 from btleWeatherStation import WeatherStation
 
 
+# details of the database to update
+DBNAME = "weather"
+DBHOST = "localhost"
+DBUSER = "weather_update"
+DBPASSWORD = "update"
+
 # MAC address of the weather station to connect to
 STATION_MAC = "e0:db:ba:ac:0e:93"
 
@@ -27,7 +33,8 @@ w = WeatherStation(STATION_MAC)
 w.measure_retry()
 
 # connect to the database and get a cursor
-conn = psycopg2.connect("dbname=weather")
+conn = psycopg2.connect(
+           database=DBNAME, host=DBHOST, user=DBUSER, password=DBPASSWORD)
 cur = conn.cursor()
 
 # work through the 4 sensors, including the internal one (0)
@@ -36,8 +43,12 @@ for s in range(0, 4):
     temp = w.get_temp(s)["current"]
     humidity = w.get_humidity(s)["current"]
 
+    # if no data from either sensor was available, skip this sensor
+    if (temp is None) and (humidity is None):
+        continue
+
     # store this temperature in the latest table
-    cur.execute("SELECT weather_latest_update (%s, %s, %s, %s)",
+    cur.execute("SELECT weather_latest_update(%s, %s, %s, %s)",
                 (s, now, temp, humidity))
 
     # store the data in the history table if we're on a multiple of 15 minutes

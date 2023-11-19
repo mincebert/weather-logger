@@ -59,7 +59,7 @@ GRANT INSERT, UPDATE ON weather_latest TO weather_update;
 
 CREATE FUNCTION weather_latest_update(
   new_sensor integer,
-  new_datetime timestamp,
+  new_datetime timestamp with time zone,
   new_temp numeric(4, 1),
   new_humidity integer
 ) RETURNS void AS $$

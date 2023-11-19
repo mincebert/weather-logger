@@ -16,12 +16,12 @@ you also need to:
 1. create the database:
 
    $ sudo -u postgres psql
-   postgres=# \i sql/postgres.sql
+   postgres=# \i database/postgres.sql
 
    $ psql -h localhost weather weather_admin
-   weather=> \i sql/weather.sql
+   weather=> \i database/weather.sql
 
-2. copy bin/log-weather to ~/bin
+2. copy weather-log to ~/bin
 
 3. install the crontab
 EOF

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# log-weather - get current weather data and update the database
+# weather-log - get current weather data and update the database
 
 
 from datetime import datetime

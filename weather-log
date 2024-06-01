@@ -30,17 +30,19 @@ now = datetime.now()
 
 # connect to our weather station and get the current data, with some retries
 w = WeatherStation(STATION_MAC)
-w.measure_retry()
+weather_data = w.measure()
 
 # connect to the database and get a cursor
 conn = psycopg.connect(f"postgresql://{DBUSER}:{DBPASSWORD}@{DBHOST}/{DBNAME}")
 cur = conn.cursor()
 
 # work through the 4 sensors, including the internal one (0)
-for s in range(0, 4):
+for sensor_num in weather_data.sensors:
+    sensor_data = weather_data.sensors[sensor_num]
+
     # get the data from this sensor
-    temp = w.get_temp(s)["current"]
-    humidity = w.get_humidity(s)["current"]
+    temp = sensor_data.temp_current
+    humidity = sensor_data.humidity_current
 
     # if no data from either sensor was available, skip this sensor
     if (temp is None) and (humidity is None):
@@ -52,7 +54,7 @@ for s in range(0, 4):
     # avoid an error matching functions in PostgreSQL
     cur.execute(
         "SELECT weather_latest_update(%s, %s, %s :: numeric(4, 1), %s)",
-        (s, now, temp, humidity))
+        (sensor_num, now, temp, humidity))
 
     # store the data in the history table if we're on a multiple of 15 minutes
     if (now.minute % HISTORY_MINS) == 0:

@@ -60,7 +60,7 @@ for sensor_num in weather_data.sensors:
     if (now.minute % HISTORY_MINS) == 0:
         cur.execute(
             "SELECT weather_history_insert(%s, %s, %s :: numeric(4, 1), %s)",
-            (s, now, temp, humidity))
+            (sensor_num, now, temp, humidity))
 
 # commit the transaction and close the connection to the database
 conn.commit()

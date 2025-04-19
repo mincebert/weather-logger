@@ -16,11 +16,18 @@ DBUSER = "weather_read"
 DBPASSWORD = "read"
 
 
+
+# --- FastAPI app ---
+
+
+
 app = FastAPI()
+
 
 @app.get("/version")
 def read_version():
-    return { "version": "0.1.1" }
+    return { "version": "0.1.2" }
+
 
 @app.get("/get_latest")
 def read_latest():
@@ -38,7 +45,7 @@ def read_latest():
                         FROM weather_latest JOIN location ON location = id
                         ORDER BY location
                         """)
-    
+``
                 # assemble a list of results as a dictionary indexed by the
                 # location description
                 r = {}
@@ -55,6 +62,12 @@ def read_latest():
 
     except (psycopg.InterfaceError, psycopg.OperationalError):
         return { "status": 200 }
+
+
+
+# --- main ---
+
+
 
 def main():
     config = uvicorn.Config("weather_server:app", host=None, log_level="info")

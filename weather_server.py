@@ -3,6 +3,7 @@
 # weather-server
 
 
+
 from fastapi import FastAPI
 import uvicorn
 
@@ -26,7 +27,7 @@ app = FastAPI()
 
 @app.get("/version")
 def read_version():
-    return { "version": "0.1.2" }
+    return { "version": "0.1.3" }
 
 
 @app.get("/get_latest")
@@ -45,23 +46,24 @@ def read_latest():
                         FROM weather_latest JOIN location ON location = id
                         ORDER BY location
                         """)
-``
-                # assemble a list of results as a dictionary indexed by the
-                # location description
-                r = {}
-                for sensor in cur:
-                    r[sensor[0]] = {
-                        "temp": sensor[1],
-                        "humidity": sensor[2],
-                        "datetime": sensor[3],
-                        "age": sensor[4]
-                    }
-
-        # return the results
-        return { "sensors": r, "status": 100 }
 
     except (psycopg.InterfaceError, psycopg.OperationalError):
         return { "status": 200 }
+
+
+    # assemble a list of results as a dictionary indexed by the
+    # location description
+    r = {}
+    for sensor in cur:
+        r[sensor[0]] = {
+            "temp": sensor[1],
+            "humidity": sensor[2],
+            "datetime": sensor[3],
+            "age": sensor[4]
+        }
+
+    # return the results
+    return { "sensors": r, "status": 100 }
 
 
 
